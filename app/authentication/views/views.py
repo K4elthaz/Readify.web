@@ -202,7 +202,7 @@ def auth_receiver(request):
 
 
 class AgreementView(TemplateView):
-    template_name = "agreement.htmlnew"
+    template_name = "agreement.html"
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get the existing context

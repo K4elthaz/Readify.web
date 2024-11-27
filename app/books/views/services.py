@@ -557,18 +557,18 @@ def invite_collaborator(request, slug):
         )
 
         if invited_collaborator:
-            if invited_collaborator.count() >= 5:
+            if invited_collaborator.count() >= 2:
                 return render(
                     request,
                     "components/error_message_alert.html",
-                    {"message": "Oops! You can invite a maximum of 5 co-authors only."},
+                    {"message": "Oops! You can invite a maximum of 2 co-authors only."},
                 )
 
         if co_authors_count >= 5:
             return render(
                 request,
                 "components/error_message_alert.html",
-                {"message": "Oops! You can add a maximum of 5 co-authors only."},
+                {"message": "Oops! You can add a maximum of 2 co-authors only."},
             )
 
         if books:
