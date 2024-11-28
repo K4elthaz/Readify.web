@@ -2,7 +2,7 @@
     {% if user.user_role == 'writer' %}
     <div class="bg-white">
         <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
-                <h1 style="text-align:center;">Pay Writer</h1>
+                <h1 style="text-align:center;">Subscriber</h1>
                 
 
                 <div class="relative overflow-x-auto">
@@ -21,15 +21,16 @@
                                 <th scope="col" class="px-6 py-3">
                                     Status
                                 </th>
+                                {% if user.user_role == 'admin' %}
                                 <th scope="col" class="px-6 py-3">
                                     Image
                                 </th>
+                                {% endif %}
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="payUnlockTableBody">
                             {% for pay_unlo in pay_unlock %}
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" data-author="{{ pay_unlo.chapter.book.author.first_name }} {{ pay_unlo.chapter.book.author.last_name }}">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ pay_unlo.chapter.title }}
                                     </th>
@@ -42,21 +43,30 @@
                                     <td class="px-6 py-4">
                                         {{ pay_unlo.status }}
                                     </td>
-                                    <!-- <td>
-                                        <button onclick="paymentModalData('{{ pay_unlo.id }}', '{{ pay_unlo.chapter_number }}', '{{ payments_here.chapter.title }}', '{{ payments_here.paid_by.full_name }}', '{{ payments_here.status }}')" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                    {% if user.user_role == 'admin' %}
+                                    <td>
+                                        <button 
+                                            onclick="paymentModalData('{{ pay_unlo.id }}', '{{ pay_unlo.chapter_number }}', '{{ pay_unlo.chapter.title }}', '{{ pay_unlo.paid_by.full_name }}', '{{ pay_unlo.status }}')" 
+                                            data-modal-target="default-modal" 
+                                            data-modal-toggle="default-modal" 
+                                            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" 
+                                            type="button">
                                             View
                                         </button>
-
-                                    </td> -->
+                                    </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                         </tbody>
+                        
+                        
                     </table>
 
             </div>
         </div>
     </div>
     {% endif %}
+
     <dl class="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4">
         <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
             <dt class="text-sm font-medium leading-6 text-gray-500">
@@ -122,4 +132,20 @@
             document.getElementById('statusHere').textContent = status;
 
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+    const userFullname = "{{ user.first_name }} {{ user.last_name }}"; // User's full name
+    const tableBody = document.getElementById('payUnlockTableBody'); // Table body element
+    const rows = tableBody.querySelectorAll('tr'); // Get all rows
+
+    rows.forEach(row => {
+        const author = row.getAttribute('data-author'); // Get the author's full name from the data attribute
+        if (author !== userFullname) {
+            row.style.display = 'none'; // Hide rows where the author doesn't match
+        }
+    });
+});
+
+
+
 </script>

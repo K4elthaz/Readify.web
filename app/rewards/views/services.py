@@ -175,7 +175,7 @@ def pay_using_rewards_coins_service(request, chapter_id):
 
     if rewards.coins >= 50:
         ChapterUnlockedByUser.objects.create(
-            paid_by=user, chapter_id=chapter_id, method_of_payment="via_rewards"
+            paid_by=user, chapter_id=chapter_id, method_of_payment="via_rewards", status="approved"
         )
         rewards.coins = rewards.coins - 50
         rewards.save()

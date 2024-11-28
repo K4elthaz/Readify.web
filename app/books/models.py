@@ -198,7 +198,7 @@ class ProofOfPaymentByUser(BaseModel):
         related_name="proofs_of_payment_by_user",
     )
     method_of_payment = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='proof_of_payment_images/', null=True, blank=True)  # Updated to use ImageField
+    # image = models.ImageField(upload_to='proof_of_payment_images/', null=True, blank=True) 
     notes = models.CharField(max_length=255, null=True)
     status = models.CharField(max_length=100, default="pending")
 

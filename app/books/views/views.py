@@ -24,7 +24,12 @@ from app.books.models import (
 )
 from app.rewards.models import Rewards, ClaimedRewards
 from app.utils import plagiarism_checker, natural_time
-
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+import json
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views import View
 
 # Create your views here.
 class MyLibraryView(LoginRequiredMixin, ListView):
@@ -223,7 +228,7 @@ class BrowseBooksView(LoginRequiredMixin, ListView):
         context["browse_books"] = True
         context["proof_of_payment"] = all_payment_proof
         context["pay_unlock"] = pay_unlock
-        context["page_title"] = "Browse Books" , "Dashboard"
+        context["page_title"] = "Browse Books"
         context["page_description"] = "View all the published books available here."
         context["rewards"] = rewards.exists()
         context["recommended_books"] = recommended_books
@@ -298,3 +303,31 @@ class PlagiarismCheckerTableResult(LoginRequiredMixin, DetailView):
         context["plagiarism_checker_logs"] = plagiarism_checker_logs
 
         return context
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdateChapterStatusView(View):
+    def post(self, request, *args, **kwargs):
+        # Extract chapter ID from URL
+        chapter_id = kwargs.get('id')  
+        
+        # Parse JSON body
+        try:
+            data = json.loads(request.body)
+            action = data.get('action')
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON body"}, status=400)
+
+        # Validate action
+        if action not in ['approve', 'decline']:
+            return JsonResponse({"error": "Invalid action"}, status=400)
+
+        # Get chapter and update status
+        chapter_unlocked = get_object_or_404(ChapterUnlockedByUser, id=chapter_id)
+        new_status = 'approved' if action == 'approve' else 'declined'
+        chapter_unlocked.status = new_status
+        chapter_unlocked.save()
+
+        return JsonResponse({
+            "message": "Status updated successfully",
+            "status": chapter_unlocked.status
+        })

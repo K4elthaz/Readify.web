@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from asgiref.sync import sync_to_async
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Sum, Avg
+from django.db.models import Count, Sum, Avg, Q
 from django.db.models.functions import TruncDate
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -10,8 +10,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from app.authentication.models import FollowedAuthor
-from app.books.models import Books, UsersFavorites, Rates
-
+from app.books.models import Books, UsersFavorites, Rates, ChapterUnlockedByUser
 
 # Create your views here.
 
@@ -45,7 +44,7 @@ def analytics_service(request):
     user = request.user
     # Get the current time
     now = timezone.now()
-
+    user_full_name = f"{request.user.first_name} {request.user.last_name}"
     seven_days_ago = now - timedelta(days=7)
 
     total_books = Books.objects.filter(author=user)
@@ -75,6 +74,8 @@ def analytics_service(request):
         "total_followers": total_followers.count(),
         "total_favorited_books_per_day": total_favorited_books_per_day,
         "book_rate_counts": book_rate_counts,
+        "pay_unlock": ChapterUnlockedByUser.objects.filter(chapter__book__author=user),
+        'user_full_name': user_full_name,
     }
 
     return render(request, "analytics.html", context)

@@ -5,8 +5,8 @@
 
     <div hx-get="{% url 'show_daily_rewards_modal' %}" hx-target="#dailyRewardModal" hx-trigger="load"></div>
 
-    <div id="dailyRewardModal"></div>
-    <div id="successClaimReward"></div>
+    <!-- <div id="dailyRewardModal"></div>
+    <div id="successClaimReward"></div> -->
     {% if user.user_role == 'admin' %}
     <br>
     <div class="bg-white">
@@ -67,7 +67,7 @@
         </div>
     </div>
     <br>
-    {% if user.user_role == 'writer' %}
+    {% if user.user_role == 'admin' %}
     <div class="bg-white">
         <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
                 <h1 style="text-align:center;">Pay Writer</h1>
@@ -81,7 +81,7 @@
                                     Chapter Title
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    User    
+                                    Author    
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Method Of Payment
@@ -90,7 +90,7 @@
                                     Status
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Image
+                                    Payment Status
                                 </th>
                             </tr>
                         </thead>
@@ -102,7 +102,7 @@
                                         {{ pay_unlo.chapter.title }}
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ pay_unlo.paid_by.full_name }}
+                                        {{  pay_unlo.chapter.book.author }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ pay_unlo.method_of_payment }}
@@ -110,12 +110,17 @@
                                     <td class="px-6 py-4">
                                         {{ pay_unlo.status }}
                                     </td>
-                                    <!-- <td>
-                                        <button onclick="paymentModalData('{{ pay_unlo.id }}', '{{ pay_unlo.chapter_number }}', '{{ payments_here.chapter.title }}', '{{ payments_here.paid_by.full_name }}', '{{ payments_here.status }}')" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                                            View
-                                        </button>
+                                    <td class="px-8 py-4">
+                                        <button 
+                                        onclick="writerPayment('{{ pay_unlo.id }}', '{{ pay_unlo.chapter_number }}', '{{ pay_unlo.chapter.title }}', '{{ pay_unlo.paid_by.full_name }}', '{{ pay_unlo.status }}')"
+                                        data-modal-target="statusModal" 
+                                        data-modal-toggle="statusModal" 
+                                        class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                                        type="button">
+                                        View
+                                    </button>
 
-                                    </td> -->
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -125,6 +130,48 @@
         </div>
     </div>
     {% endif %}
+
+    <div id="statusModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto h-modal md:h-full">
+        <div class="relative w-full h-full max-w-md md:h-auto">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        Update Status
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="statusModal">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <div class="p-6 space-y-6">
+                    <p id="chapterDetails" class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                        Chapter details will appear here.
+                    </p>
+                    <!-- Loading Spinner (Initially Hidden) -->
+                    <div id="loadingIndicator" class="text-center hidden">
+                        <svg class="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10" stroke-width="4" stroke="currentColor" fill="none"></circle>
+                            <path d="M4 12a8 8 0 1116 0A8 8 0 014 12z" fill="currentColor"></path>
+                        </svg>
+                        <p class="text-gray-500">Processing...</p>
+                    </div>
+                </div>
+                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <button id="approveButton" type="button" class="text-white bg-green-600 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Approve
+                    </button>
+                    <button id="declineButton" type="button" class="text-white bg-red-600 hover:bg-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Decline
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
 
     <br>
     <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -394,6 +441,77 @@
             });
             
         }
+
+        function writerPayment(id, chapterNumber, title, userName, status) {
+    const modal = document.getElementById('statusModal');
+    document.getElementById('chapterDetails').textContent = `
+        Chapter Number: ${chapterNumber}, Title: ${title}, User: ${userName}, Status: ${status}
+    `;
+
+    // Set up buttons
+    const approveButton = document.getElementById('approveButton');
+    const declineButton = document.getElementById('declineButton');
+
+    approveButton.onclick = () => updateStatus(id, 'approve');
+    declineButton.onclick = () => updateStatus(id, 'decline');
+
+    modal.classList.remove('hidden');
+}
+
+function updateStatus(id, action) {
+    const modal = document.getElementById('statusModal');
+    const approveButton = document.getElementById('approveButton');
+    const declineButton = document.getElementById('declineButton');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    
+    // Disable the buttons and show the loading indicator
+    approveButton.disabled = true;
+    declineButton.disabled = true;
+    loadingIndicator.style.display = 'block'; // Show the loading spinner
+
+    // Send the request to update the status
+    fetch(`/update-status/${id}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action }), // Send the action ('approve' or 'decline')
+    })
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((data) => {
+                    throw new Error(data.error || 'An unknown error occurred');
+                });
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // Handle success: reload page and close modal
+            console.log('Success:', data);
+            alert(data.message); // Show a success message
+            
+            // Close the modal
+            modal.classList.add('hidden');
+            
+            // Reload the page to reflect the updated status
+            location.reload();
+        })
+        .catch((error) => {
+            // Handle error
+            console.error('Error:', error);
+            alert(`Error: ${error.message}`);
+        })
+        .finally(() => {
+            // Hide the loading indicator and re-enable buttons
+            loadingIndicator.style.display = 'none'; // Hide loading spinner
+            approveButton.disabled = false;
+            declineButton.disabled = false;
+        });
+}
+
+
+
+
 
     </script>
 

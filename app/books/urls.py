@@ -30,6 +30,7 @@ from app.books.views.views import (
     MyFavoritesView,
     UpdateBookContentView,
     PlagiarismCheckerTableResult,
+    UpdateChapterStatusView
 )
 
 service_urlpatterns = [
@@ -158,4 +159,5 @@ urlpatterns = [
         PlagiarismCheckerTableResult.as_view(),
         name="plagiarism_checker_table",
     ),
+    path("update-status/<str:id>/", UpdateChapterStatusView.as_view(), name='update-status'),
 ] + service_urlpatterns
