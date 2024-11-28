@@ -55,7 +55,7 @@ class BookForm(forms.ModelForm):
 class BookContentForm(forms.ModelForm):
     class Meta:
         model = BooksChapter
-        fields = ["title", "is_draft", "is_locked", "content"]  # Include "content"
+        fields = ["title", "is_draft", "is_locked"]
         labels = {
             "is_draft": "Is draft?",
             "is_locked": "Is this chapter locked?",
@@ -64,9 +64,3 @@ class BookContentForm(forms.ModelForm):
             "is_draft": CustomBooleanSelect(),
             "is_locked": CustomBooleanSelect(),
         }
-
-    def clean_content(self):
-        content = self.cleaned_data.get('content')
-        if BooksChapter.objects.filter(content=content).exclude(id=self.instance.id).exists():
-            raise ValidationError("This content already exists. Please provide unique content.")
-        return content
