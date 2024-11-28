@@ -308,8 +308,8 @@
                                                 Communities
                                             </p>
                                             {% if user.id and user.user_role == 'writer' %}
-                                            <a href="agreement-side-nav/"
-                                               class="cursor-pointer group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6
+                                            <a href="{% url 'agreement_side_nav' %}"
+                                                class="cursor-pointer group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6
                                                     {% if forums_active %} text-pink-600 {% else %} text-gray-500 {% endif %}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" 
                                                     viewBox="0 0 24 24" 
