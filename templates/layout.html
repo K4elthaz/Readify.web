@@ -308,10 +308,7 @@
                                                 Communities
                                             </p>
                                             {% if user.id and user.user_role == 'writer' %}
-                                            <p hx-get="{% url 'agreement' user.id %}"
-                                               hx-push-url="true"
-                                               hx-target="body"
-                                               method="get"
+                                            <a href="agreement-side-nav/"
                                                class="cursor-pointer group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6
                                                     {% if forums_active %} text-pink-600 {% else %} text-gray-500 {% endif %}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" 
@@ -321,10 +318,8 @@
                                                    <path stroke-linecap="round" stroke-linejoin="round" 
                                                          d="M16.5 3.75h-9A2.25 2.25 0 0 0 5.25 6v12A2.25 2.25 0 0 0 7.5 20.25h9a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25zm-9 0v16.5M7.5 7.5h9M7.5 12h9m-5.25 4.5H9" />
                                                </svg>
-                                               
-
                                                 Contract
-                                            </p> 
+                                            </a> 
                                             {% endif %}
                                         </li>
                                     {% endif %}

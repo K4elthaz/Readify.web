@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl">
+            <div class="overflow-hidden rounded-lg bg-white shadow">
+                <div class="px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <tbody class="bg-white">
+                        <tr class="even:bg-gray-50">
+                            <td class="py-2 pl-4 pr-3 text-base font-semibold text-gray-900 sm:text-lg sm:pl-4">
+                                Readify
+                            </td>
+                        </tr>
+                        <tr class="even:bg-gray-50">
+                            <td class="py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-4">Admin</td>
+                        </tr>
+                        <tr class="even:bg-gray-50">
+                            <td class="py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-4">09213409826</td>
+                        </tr>
+                        <tr class="even:bg-gray-50">
+                            <td class="py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-4">{{ date }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-4 py-4 sm:px-6 lg:px-8 lg:py-6">
+                    <table class="divide-y divide-gray-300">
+                        <tbody class="bg-white">
+                        <tr class="even:bg-gray-50">
+                            <td class="py-3 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-4">Dear {{ author }},</td>
+                        </tr>
+                        <tr class="even:bg-gray-50">
+                            <td class="py-3 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-4"><span
+                                    class="font-semibold">Subject:</span> Request for
+                                Revenue Sharing from Reader Payments
+                            </td>
+                        </tr>
+                        <tr class="even:bg-gray-50">
+                            <td class="pt-6 pb-3 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                I hope this message finds you well. I'm reaching out regarding the financial
+                                arrangements for the distribution of your work, as a <span
+                                    class="font-semibold"> Writer</span>.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-5 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                As per our existing agreement, Readify provides a range of services, including marketing, 
+                                distribution, and platform support, to ensure that your work reaches a wide audience. 
+                                In light of the growing readership and the corresponding increase in reader payments, 
+                                we believe it is essential to revisit our financial arrangement to ensure 
+                                mutual benefit and sustainability.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                We kindly request that a portion of the payments received from readers be shared with Readify. 
+                                This adjustment will help cover the costs associated with the services we provide, 
+                                including but not limited to hosting, maintenance, and promotional efforts, 
+                                which are crucial for the ongoing success and reach of your work.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pt-6 pb-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-4 text-justify leading-6">
+                                We propose the following terms for revenue sharing:
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pb-3 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                <span class="font-semibold">1. Percentage of Revenue:</span> 30% of the gross revenue
+                                received from reader payments to be allocated to Readify.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pb-3 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                <span class="font-semibold">2. Payment Schedule:</span>  Payments to authors will be made based on 
+                                the revenue generated from reader payments for each chapter of their work. 
+                                Detailed statements will be provided to both the authors and the admin, 
+                                outlining the chapter-specific earnings.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pb-3 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                <span class="font-semibold">3. Review and Adjustments:</span> An annual review of the terms will be conducted 
+                                to ensure fairness and adequacy based on evolving market trends and readership.
+                            </td>
+                        </tr>
+                        <tr>
+
+                        </tr>
+                            <td class="pb-3 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                <span class="font-semibold">4. Content Guidelines:</span> Works identified as AI-based or containing plagiarism 
+                                will be subject to review by the admin and may be removed from the platform if 
+                                they do not meet our content guidelines.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-5 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                We believe this arrangement will benefit both parties, 
+                                enabling continued growth and ensuring that the resources needed to support your work 
+                                are adequately maintained. We are open to further discussing these terms and negotiating 
+                                any aspects to reach a mutually satisfactory agreement.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                Thank you for your attention to this matter. I look forward to your positive response.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pt-5 pb-2 pl-4 pr-3 text-sm text-gray-900 sm:pl-4 text-justify leading-6">
+                                Sincerely,<br>
+                                Admin<br>
+                                Readify
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-4 py-4 sm:px-6 lg:px-14 mb-20">
+                    <div class="relative flex items-start">
+                        <div class="flex h-6 items-center">
+                            <button id="cancelButton" type="button" onclick="handleClose()" 
+                                class="inline-flex w-full justify-center rounded-md bg-pink-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 sm:ml-3 sm:w-auto">
+                                Cancel
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function handleClose() {
+            window.location.href = '/dashboard';
+        }
+    </script>
+{% endblock %}

@@ -199,6 +199,9 @@ def auth_receiver(request):
 
     except ValueError:
         return HttpResponse("Invalid token", status=403)
+    
+class AgreementSideNav(TemplateView):
+    template_name = "agreement_side_nav.html"
 
 
 class AgreementView(TemplateView):

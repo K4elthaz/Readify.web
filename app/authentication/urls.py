@@ -25,6 +25,7 @@ from app.authentication.views.views import (
     ReferralCodeView,
     verify_email,
     auth_receiver,
+    AgreementSideNav,
     AgreementView,
     ForgotPasswordView,
     ResetPasswordView,
@@ -120,6 +121,11 @@ urlpatterns = [
         "referral-code/<str:pk>",
         ReferralCodeView.as_view(),
         name="referral_code",
+    ),
+    path(
+        "agreement-side-nav/",
+        AgreementSideNav.as_view(),
+        name="agreement_side_nav",
     ),
     path(
         "agreement/<str:id>",
