@@ -27,6 +27,16 @@ referrerpolicy="origin"></script> -->
         autosave_restore_when_empty: true,
     });
 
+    document.addEventListener('htmx:responseError', function(event) {
+        const response = event.detail.xhr.response;
+        const errorData = JSON.parse(response);
+
+        if (errorData.error) {
+            const messageDiv = document.querySelector('#message');
+            messageDiv.innerHTML = `<div class="text-red-500">${errorData.error}</div>`;
+        }
+    });
+
 </script>
 {% endblock %}
 {% block layout %}
@@ -50,9 +60,10 @@ referrerpolicy="origin"></script> -->
             <div class="mx-auto max-w-7xl overflow-hidden py-10 sm:px-6 lg:px-8">
 
                 <form hx-post="{% url 'save_new_content_service' slug=slug %}"
-                      hx-trigger="submit"
-                      hx-target="#message"
-                      onsubmit="tinymce.triggerSave();">  <!-- This ensures TinyMCE content is saved -->
+                    hx-on="htmx:responseError"
+                    hx-trigger="submit"
+                    hx-target="#message"
+                    onsubmit="tinymce.triggerSave();">  <!-- This ensures TinyMCE content is saved -->
                     {% csrf_token %}
                     <div class="border-b border-gray-200 pb-5 mb-5">
                         <h2 class="text-lg font-semibold leading-6 text-gray-600">

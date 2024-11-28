@@ -117,6 +117,10 @@ def save_new_content_service(request, slug):
     #         {"message": "Chapter number already exists for this book"},
     #     )
 
+    if BooksChapter.objects.filter(Q(content=content)).exists():
+        return JsonResponse({"error": "Content must be unique and case insensitive."}, status=400)
+
+
     try:
         # Attempt to get the latest chapter
         current_chapter = (
@@ -487,22 +491,31 @@ def update_book_content_service(request, slug):
     is_locked = request.POST.get("is_locked", False)
     content = request.POST.get("content", "")
     updated_by = request.user.last_name + ' ' + request.user.first_name[0] + '.'
+  
+    try:
+        if BooksChapter.objects.exclude(slug=slug).filter(content__iexact=content).exists():
+            raise ValueError("Content must be unique and case insensitive.")
+        
+        # Update the book chapter
+        BooksChapter.objects.filter(slug=slug).update(
+            title=title,
+            content=content,
+            is_draft=is_draft,
+            is_locked=is_locked,
+            updated_at=now(),
+            images=updated_by,
+        )
 
-    # Update the book chapter
-    BooksChapter.objects.filter(slug=slug).update(
-        title=title,
-        content=content,
-        is_draft=is_draft,
-        is_locked=is_locked,
-        updated_at=now(),
-        images=updated_by,
-    )
+        run_plagiarism_checker_tasks.delay(slug=slug)
 
-    run_plagiarism_checker_tasks.delay(slug=slug)
+        response = HttpResponse() 
+        response["HX-Redirect"] = f"/book/content/detail/{slug}"
+        return response
 
-    response = HttpResponse()  # Define the response object
-    response["HX-Redirect"] = f"/book/content/detail/{slug}"
-    return response
+    except ValueError as ve:
+        return JsonResponse({"error": str(ve)}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 
 

@@ -78,7 +78,7 @@ class BooksChapter(BaseModel):
     title = models.CharField(max_length=255)
     chapter_number = models.IntegerField()
     images = models.CharField(max_length=255, null=True, blank=True)
-    content = models.TextField()
+    content = models.TextField(unique=True)
     is_draft = models.BooleanField(default=True)
     is_locked = models.BooleanField(default=True)
     is_archived = models.BooleanField(default=False)

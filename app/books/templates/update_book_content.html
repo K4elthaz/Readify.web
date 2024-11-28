@@ -106,6 +106,16 @@ referrerpolicy="origin"></script> -->
         socket.onerror = function (e) {
             console.error("WebSocket error: ", e);
         };
+
+        document.addEventListener('htmx:responseError', function(event) {
+            const response = event.detail.xhr.response;
+            const errorData = JSON.parse(response);
+
+            if (errorData.error) {
+                const messageDiv = document.querySelector('#message');
+                messageDiv.innerHTML = `<div class="text-red-500">${errorData.error}</div>`;
+            }
+        });
     </script>
 {% endblock %}
 
@@ -132,6 +142,7 @@ referrerpolicy="origin"></script> -->
                 <div id="contentForm">
                     <form
                             hx-post="{% url 'update_book_content_service' slug=slug %}"
+                            hx-on="htmx:responseError"
                             hx-trigger="submit"
                             hx-target="#message"
                             onsubmit="tinymce.triggerSave();"
