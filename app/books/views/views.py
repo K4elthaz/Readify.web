@@ -223,7 +223,7 @@ class BrowseBooksView(LoginRequiredMixin, ListView):
         context["browse_books"] = True
         context["proof_of_payment"] = all_payment_proof
         context["pay_unlock"] = pay_unlock
-        context["page_title"] = "Browse Books"
+        context["page_title"] = "Browse Books" , "Dashboard"
         context["page_description"] = "View all the published books available here."
         context["rewards"] = rewards.exists()
         context["recommended_books"] = recommended_books

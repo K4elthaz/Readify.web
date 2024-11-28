@@ -7,6 +7,166 @@
 
     <div id="dailyRewardModal"></div>
     <div id="successClaimReward"></div>
+    {% if user.user_role == 'admin' %}
+    <br>
+    <div class="bg-white">
+        <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+                <h1 style="text-align:center;">Approval of Payments</h1>
+                
+
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Chapter Title
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    User
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Notes
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Image
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payments_here in proof_of_payment %}
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ payments_here.chapter.title }}
+                                        (Chapter {{ payments_here.chapter.chapter_number }})
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ payments_here.paid_by.full_name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ payments_here.notes }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ payments_here.status }}
+                                    </td>
+                                    <td>
+                                        <button onclick="paymentModalData('{{ payments_here.id }}', '{{ payments_here.chapter.chapter_number }}', '{{ payments_here.chapter.title }}', '{{ payments_here.notes }}', '{{ payments_here.paid_by.full_name }}', '{{ payments_here.status }}', '{{ payments_here.image }}')" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                            View
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
+    </div>
+    <br>
+    {% if user.user_role == 'writer' %}
+    <div class="bg-white">
+        <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+                <h1 style="text-align:center;">Pay Writer</h1>
+                
+
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Chapter Title
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    User    
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Method Of Payment
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Image
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pay_unlo in pay_unlock %}
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ pay_unlo.chapter.title }}
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ pay_unlo.paid_by.full_name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ pay_unlo.method_of_payment }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ pay_unlo.status }}
+                                    </td>
+                                    <!-- <td>
+                                        <button onclick="paymentModalData('{{ pay_unlo.id }}', '{{ pay_unlo.chapter_number }}', '{{ payments_here.chapter.title }}', '{{ payments_here.paid_by.full_name }}', '{{ payments_here.status }}')" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                            View
+                                        </button>
+
+                                    </td> -->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <br>
+    <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        Payment 
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5 space-y-4 text-center">
+                    <h1 id="ChapterTitleM"></h1>
+                    <h1 id="UserM"></h1>
+                    <img id="imageDisplay" style="max-width: 300px; display:none; margin-left:auto; margin-right:auto;" alt="Uploaded Image" />
+                    NOTES
+                    <br>
+                    <input id="notesHere" class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                    </input>
+                    <br>
+                    Status
+                    <p id="statusHere" class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                    </p>
+                </div>
+
+                <!-- Modal footer -->
+                <div id="acceptDeclineButton" class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <button onclick="decidePayment('Approve')" data-modal-hide="default-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Approve</button>
+                    <button onclick="decidePayment('Decline')" data-modal-hide="default-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
 
     <div class="bg-white mx-auto max-w-7xl sm:px-6 lg:px-8 py-8">
         <div class="mt-2">
@@ -41,164 +201,6 @@
                 </div>
             </div>
         </div>
-        {% if user.user_role == 'admin' %}
-            <br>
-            <div class="bg-white">
-                <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
-                        <h1 style="text-align:center;">Approval of Payments</h1>
-                        
-
-                        <div class="relative overflow-x-auto">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Chapter Title
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            User
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Notes
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Status
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Image
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for payments_here in proof_of_payment %}
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        
-                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ payments_here.chapter.title }}
-                                                (Chapter {{ payments_here.chapter.chapter_number }})
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                {{ payments_here.paid_by.full_name }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                {{ payments_here.notes }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                {{ payments_here.status }}
-                                            </td>
-                                            <td>
-                                                <button onclick="paymentModalData('{{ payments_here.id }}', '{{ payments_here.chapter.chapter_number }}', '{{ payments_here.chapter.title }}', '{{ payments_here.notes }}', '{{ payments_here.paid_by.full_name }}', '{{ payments_here.status }}', '{{ payments_here.image }}')" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                                                    View
-                                                </button>
-
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-
-                    </div>
-                </div>
-            </div>
-            <br>
-
-            <div class="bg-white">
-                <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
-                        <h1 style="text-align:center;">Pay Writer</h1>
-                        
-
-                        <div class="relative overflow-x-auto">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Chapter Title
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            User    
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Method Of Payment
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Status
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Image
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for pay_unlo in pay_unlock %}
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        
-                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ pay_unlo.chapter.title }}
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                {{ pay_unlo.paid_by.full_name }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                {{ pay_unlo.method_of_payment }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                {{ pay_unlo.status }}
-                                            </td>
-                                            <td>
-                                                <button onclick="paymentModalData('{{ pay_unlo.id }}', '{{ pay_unlo.chapter_number }}', '{{ payments_here.chapter.title }}', '{{ payments_here.paid_by.full_name }}', '{{ payments_here.status }}')" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                                                    View
-                                                </button>
-
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative p-4 w-full max-w-2xl max-h-full">
-                    <!-- Modal content -->
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        <!-- Modal header -->
-                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                Payment 
-                            </h3>
-                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                </svg>
-                                <span class="sr-only">Close modal</span>
-                            </button>
-                        </div>
-                        <!-- Modal body -->
-                        <div class="p-4 md:p-5 space-y-4 text-center">
-                            <h1 id="ChapterTitleM"></h1>
-                            <h1 id="UserM"></h1>
-                            <img id="imageDisplay" style="max-width: 300px; display:none; margin-left:auto; margin-right:auto;" alt="Uploaded Image" />
-                            NOTES
-                            <br>
-                            <input id="notesHere" class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            </input>
-                            <br>
-                            Status
-                            <p id="statusHere" class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            </p>
-                        </div>
-
-                        <!-- Modal footer -->
-                        <div id="acceptDeclineButton" class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <button onclick="decidePayment('Approve')" data-modal-hide="default-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Approve</button>
-                            <button onclick="decidePayment('Decline')" data-modal-hide="default-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
         
         <div class="bg-white">
             <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
@@ -267,16 +269,6 @@
 
         <div id="createBookModal" class="hidden relative z-10" aria-labelledby="modal-title" role="dialog"
              aria-modal="true">
-            <!--
-              Background backdrop, show/hide based on modal state.
-
-              Entering: "ease-out duration-300"
-                From: "opacity-0"
-                To: "opacity-100"
-              Leaving: "ease-in duration-200"
-                From: "opacity-100"
-                To: "opacity-0"
-            -->
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
             <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -402,11 +394,6 @@
             });
             
         }
-
-
-
-
-
 
     </script>
 

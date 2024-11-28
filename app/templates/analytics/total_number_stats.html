@@ -1,4 +1,62 @@
 <div>
+    {% if user.user_role == 'writer' %}
+    <div class="bg-white">
+        <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+                <h1 style="text-align:center;">Pay Writer</h1>
+                
+
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Chapter Title
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    User    
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Method Of Payment
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Image
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pay_unlo in pay_unlock %}
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ pay_unlo.chapter.title }}
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ pay_unlo.paid_by.full_name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ pay_unlo.method_of_payment }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ pay_unlo.status }}
+                                    </td>
+                                    <!-- <td>
+                                        <button onclick="paymentModalData('{{ pay_unlo.id }}', '{{ pay_unlo.chapter_number }}', '{{ payments_here.chapter.title }}', '{{ payments_here.paid_by.full_name }}', '{{ payments_here.status }}')" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                            View
+                                        </button>
+
+                                    </td> -->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <dl class="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4">
         <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
             <dt class="text-sm font-medium leading-6 text-gray-500">
@@ -32,3 +90,36 @@
         </div>
     </dl>
 </div>
+
+
+<script>
+    var openedPaymentId;
+            function paymentModalData(id, title, chapter, notes, full_name, status, imageURLHere) {
+            openedPaymentId = id;
+            // Hide the 'acceptDeclineButton' if the status is not 'pending'
+            if (status != 'pending') {
+                document.getElementById('acceptDeclineButton').style.display = 'none';
+            }
+
+            // Update the image display logic
+            let imageDisplay = document.getElementById('imageDisplay');
+            let newImageUrl = '../static/uploads/' + imageURLHere;
+
+            // Check if the image URL is valid
+            if (newImageUrl) {
+                // Assuming `imageURLHere` is a relative path to the image
+                imageDisplay.src = newImageUrl; 
+                imageDisplay.style.display = 'block';  // Show the image
+            } else {
+                // Hide the image if no valid URL is provided
+                imageDisplay.style.display = 'none';
+            }
+
+            // Update modal content
+            document.getElementById('ChapterTitleM').textContent = chapter + ' (Chapter ' + title + ')';
+            document.getElementById('UserM').textContent = full_name;
+            document.getElementById('notesHere').value = notes;
+            document.getElementById('statusHere').textContent = status;
+
+        }
+</script>
