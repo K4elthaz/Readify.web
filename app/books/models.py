@@ -9,7 +9,7 @@ from django_tiptap.fields import TipTapTextField
 
 from app.enums import StartReadingChapter
 from app.models import BaseModel
-
+from django.utils.crypto import get_random_string
 
 class Round(Func):
     function = "ROUND"
@@ -51,7 +51,7 @@ class Books(BaseModel):
     cover_photo = models.CharField(max_length=255, null=True, blank=True)
     category = models.ManyToManyField(Categories, blank=True)
     is_published = models.BooleanField(default=True)
-    slug = AutoSlugField(populate_from="title")
+    slug = AutoSlugField(populate_from="generate_unique_slug", unique=True)
 
     co_authors = models.ManyToManyField(
         "authentication.User", blank=True, related_name="books_co_author"
@@ -65,6 +65,13 @@ class Books(BaseModel):
     def __str__(self):
         return self.title
 
+    def generate_unique_slug(self):
+        """
+        Generate a unique slug by appending a random 5-character string to the title.
+        """
+        unique_id = get_random_string(length=5)
+        return f"{self.title}-{unique_id}"
+
 
 class BooksChapter(BaseModel):
     book = models.ForeignKey("Books", on_delete=models.CASCADE, related_name="chapters")
@@ -75,7 +82,7 @@ class BooksChapter(BaseModel):
     is_draft = models.BooleanField(default=True)
     is_locked = models.BooleanField(default=True)
     is_archived = models.BooleanField(default=False)
-    slug = AutoSlugField(populate_from="title")
+    slug = AutoSlugField(populate_from="generate_unique_slug", unique=True)
 
     class Meta:
         db_table = "books_chapter"
@@ -90,6 +97,13 @@ class BooksChapter(BaseModel):
         reading_speed_wpm: int = 200  # average reading speed in words per minute
         reading_time_minutes: int = math.ceil(word_count / reading_speed_wpm)
         return reading_time_minutes
+
+    def generate_unique_slug(self):
+        """
+        Generate a unique slug by combining the book's title, chapter number, and a random string.
+        """
+        unique_id = get_random_string(length=5)
+        return f"{self.book.slug}-chapter-{self.chapter_number}-{unique_id}"
 
 
 class UsersStartedChapter(BaseModel):
