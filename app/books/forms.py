@@ -2,7 +2,7 @@ from django import forms
 from tinymce.widgets import TinyMCE
 
 from app.books.models import Books, Categories, BooksChapter
-
+from django.core.exceptions import ValidationError
 
 class CustomBooleanSelect(forms.Select):
     def __init__(self, *args, **kwargs):
@@ -55,7 +55,7 @@ class BookForm(forms.ModelForm):
 class BookContentForm(forms.ModelForm):
     class Meta:
         model = BooksChapter
-        fields = ["title", "is_draft", "is_locked"]
+        fields = ["title", "is_draft", "is_locked", "content"]  # Include "content"
         labels = {
             "is_draft": "Is draft?",
             "is_locked": "Is this chapter locked?",
@@ -64,3 +64,9 @@ class BookContentForm(forms.ModelForm):
             "is_draft": CustomBooleanSelect(),
             "is_locked": CustomBooleanSelect(),
         }
+
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+        if BooksChapter.objects.filter(content=content).exclude(id=self.instance.id).exists():
+            raise ValidationError("This content already exists. Please provide unique content.")
+        return content

@@ -43,8 +43,8 @@ def save_new_book_service(request):
             return JsonResponse({"error": "Title cannot be blank."}, status=400)
         
         # Check if title already exists
-        if Books.objects.filter(title=title).exists():
-            return JsonResponse({"error": "A book with this title already exists."}, status=400)
+        # if Books.objects.filter(title=title).exists():
+        #     return JsonResponse({"error": "A book with this title already exists."}, status=400)
         
         if not description:
             return JsonResponse({"error": "Description cannot be blank."}, status=400)
