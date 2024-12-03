@@ -1,5 +1,6 @@
 from typing import List, Any
 from urllib.parse import urlparse
+from difflib import SequenceMatcher
 
 from asgiref.sync import sync_to_async
 from cloudinary import CloudinaryImage
@@ -96,30 +97,29 @@ def save_new_book_service(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
+def check_similarity(content, existing_content):
+    """
+    Calculate similarity between two pieces of text using SequenceMatcher.
+    """
+    return SequenceMatcher(None, content, existing_content).ratio() * 100
 
 def save_new_content_service(request, slug):
-
     title = request.POST.get("title", "")
     is_draft = request.POST.get("is_draft", False)
     is_locked = request.POST.get("is_locked", False)
     content = request.POST.get("content", "")
 
     book: Books = Books.objects.filter(slug=slug).first()
-    # Check if the chapter number already exists for the given book
-    # is_chapter_number_exists: bool = BooksChapter.objects.filter(
-    #     Q(chapter_number=chapter_number) & Q(book_id=book.id)
-    # ).exists()
-    #
-    # if is_chapter_number_exists:
-    #     return render(
-    #         request,
-    #         "components/error_message_alert.html",
-    #         {"message": "Chapter number already exists for this book"},
-    #     )
 
-    if BooksChapter.objects.filter(Q(content=content)).exists():
-        return JsonResponse({"error": "Content must be unique and case insensitive."}, status=400)
+    # if BooksChapter.objects.filter(Q(content=content)).exists():
+    #     return JsonResponse({"error": "Content must be unique and case insensitive."}, status=400)
 
+    # Internal plagiarism check
+    all_chapters = BooksChapter.objects.filter(is_archived=False).values_list("content", flat=True)
+    for existing_content in all_chapters:
+        similarity = check_similarity(content, existing_content)
+        if similarity >= 30:
+            return JsonResponse({"error": f"Content is too similar to existing content ({similarity:.2f}% similarity) from internal data."}, status=400)
 
     try:
         # Attempt to get the latest chapter
@@ -143,6 +143,7 @@ def save_new_content_service(request, slug):
         is_locked=is_locked,
     )
 
+    # External plagiarism check
     run_plagiarism_checker_tasks.delay(slug=new_chapter.slug)
 
     response = JsonResponse({"message": "Book content created successfully"})
