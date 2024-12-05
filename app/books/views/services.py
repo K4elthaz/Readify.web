@@ -115,12 +115,24 @@ def save_new_content_service(request, slug):
     #     return JsonResponse({"error": "Content must be unique and case insensitive."}, status=400)
 
     # Internal plagiarism check
-    all_chapters = BooksChapter.objects.filter(is_archived=False).values_list("content", flat=True)
-    for existing_content in all_chapters:
-        similarity = check_similarity(content, existing_content)
-        if similarity >= 30:
-            return JsonResponse({"error": f"Content is too similar to existing content ({similarity:.2f}% similarity) from internal data."}, status=400)
+    all_chapters = BooksChapter.objects.filter(is_archived=False).select_related("book").values_list("content", "book__title")
+    highest_similarity = 0
+    most_similar_book = None
 
+    for existing_content, book_title in all_chapters:
+        similarity = check_similarity(content, existing_content)
+        if similarity > highest_similarity:
+            highest_similarity = similarity
+            most_similar_book = book_title
+
+        if similarity >= 30:
+            return JsonResponse(
+                {
+                    "error": f"Content is too similar to existing content ({similarity:.2f}% similarity) from a Book {most_similar_book}.",
+                    "most_similar_book": most_similar_book,
+                },
+                status=400
+            )
     try:
         # Attempt to get the latest chapter
         current_chapter = (
