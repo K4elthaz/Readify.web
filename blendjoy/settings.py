@@ -83,7 +83,7 @@ CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:
 
 # CSRF_COOKIE_DOMAIN = "up.railway.app"
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog/", "https://readify-web.onrender.com/"]
 
