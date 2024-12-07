@@ -42,7 +42,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 SECRET_KEY = "django-insecure-ws&oot&xi!ow-u*z^41i-+2r5_wl$@+khj6oa*&8!praes6f7f"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -79,13 +79,13 @@ INSTALLED_APPS = [
     "app.chat",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog"]
+CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:8000"]
 
 # CSRF_COOKIE_DOMAIN = "up.railway.app"
 
 CSRF_COOKIE_SECURE = True
 
-CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog"]
+CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000"]
 
 # Setup support for proxy headers
 USE_X_FORWARDED_HOST = True
@@ -98,6 +98,7 @@ CRISPY_TEMPLATE_PACK = "tailwind"
 
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -190,15 +191,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# This production code might break development mode, so we check whether we're in DEBUG mode
-if not DEBUG:
-    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
-    # and renames the files with unique names for each version to support long-term caching
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
