@@ -42,7 +42,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 SECRET_KEY = "django-insecure-ws&oot&xi!ow-u*z^41i-+2r5_wl$@+khj6oa*&8!praes6f7f"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -79,13 +79,13 @@ INSTALLED_APPS = [
     "app.chat",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:8000"]
+CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog"]
 
 # CSRF_COOKIE_DOMAIN = "up.railway.app"
 
 CSRF_COOKIE_SECURE = True
 
-CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000"]
+CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog"]
 
 # Setup support for proxy headers
 USE_X_FORWARDED_HOST = True
@@ -429,4 +429,4 @@ PWA_APP_SCREENSHOTS = [
         "type": "image/png",
     }
 ]
-PWA_APP_DEBUG_MODE = True
+PWA_APP_DEBUG_MODE = False
