@@ -88,8 +88,8 @@ CSRF_COOKIE_SECURE = True
 CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog/"]
 
 # Setup support for proxy headers
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# USE_X_FORWARDED_HOST = True
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
