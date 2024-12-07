@@ -85,7 +85,7 @@ CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:
 
 CSRF_COOKIE_SECURE = True
 
-CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000", "http://readify.blog", "https://readify-web.onrender.com/"]
+CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog", "https://readify-web.onrender.com/"]
 
 # Setup support for proxy headers
 USE_X_FORWARDED_HOST = True
@@ -98,6 +98,7 @@ CRISPY_TEMPLATE_PACK = "tailwind"
 
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -130,7 +131,14 @@ ASGI_APPLICATION = "blendjoy.asgi.application"
 WSGI_APPLICATION = "blendjoy.wsgi.application"
 
 
-CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [os.environ.get('CELERY_BROKER_URL_REDIS')],
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -193,6 +201,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
