@@ -79,17 +79,17 @@ INSTALLED_APPS = [
     "app.chat",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog/", "https://readify-web.onrender.com/"]
+CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:8000"]
 
 # CSRF_COOKIE_DOMAIN = "up.railway.app"
 
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 
-CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000", "https://readify.blog/", "https://readify-web.onrender.com/"]
+CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000"]
 
 # Setup support for proxy headers
-# USE_X_FORWARDED_HOST = True
-# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
@@ -131,7 +131,14 @@ ASGI_APPLICATION = "blendjoy.asgi.application"
 WSGI_APPLICATION = "blendjoy.wsgi.application"
 
 
-CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [os.environ.get('CELERY_BROKER_URL_REDIS')],
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
