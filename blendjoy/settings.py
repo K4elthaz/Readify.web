@@ -429,4 +429,4 @@ PWA_APP_SCREENSHOTS = [
         "type": "image/png",
     }
 ]
-PWA_APP_DEBUG_MODE = False
+PWA_APP_DEBUG_MODE = True
