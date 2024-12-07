@@ -79,13 +79,13 @@ INSTALLED_APPS = [
     "app.chat",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:8000"]
+CSRF_TRUSTED_ORIGINS = ["https://readify-dev.up.railway.app", "http://localhost:8000", "readify.blog"]
 
 # CSRF_COOKIE_DOMAIN = "up.railway.app"
 
 CSRF_COOKIE_SECURE = True
 
-CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000"]
+CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost:8000", "readify.blog"]
 
 # Setup support for proxy headers
 USE_X_FORWARDED_HOST = True
