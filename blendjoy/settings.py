@@ -90,10 +90,7 @@ CORS_ORIGIN_WHITELIST = ["https://readify-dev.up.railway.app", "http://localhost
 # Setup support for proxy headers
 # USE_X_FORWARDED_HOST = True
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-CSRF_COOKIE_SECURE = False
-SESSION_COOKIE_SECURE = False
-SECURE_BROWSER_XSS_FILTER = False
-SECURE_CONTENT_TYPE_NOSNIFF = False
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
