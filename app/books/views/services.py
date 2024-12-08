@@ -587,7 +587,7 @@ def invite_collaborator(request, slug):
                 return render(
                     request,
                     "components/error_message_alert.html",
-                    {"message": "Oops! You can invite a maximum of 1 co-authors only."},
+                    {"message": "Oops! You can invite only one co-author, as there is already a pending invite."},
                 )
 
         if co_authors_count >= 1:
