@@ -150,7 +150,7 @@ def send_email_verification(email):
         "email_verification.html",
         {
             "email": email,
-            "verification_link": f"https://readify.fun/verify-email/{base64_string}",
+            "verification_link": f"https://readify.blog/verify-email/{base64_string}",
         },
     )
 
@@ -208,7 +208,7 @@ def send_password_reset_verification(email):
         "password_reset_email.html",
         {
             "email": email,
-            "verification_link": f"https://readify.fun/reset-password/{base64_string}",
+            "verification_link": f"https://readify.blog/reset-password/{base64_string}",
         },
     )
 
